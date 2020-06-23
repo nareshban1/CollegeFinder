@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+<head>
+   <title>Collegefinder| Contact Us</title>
+</head>
+<div class="container contact-form bg-white rounded shadow-lg p-1 mb-6 mt-5">
+   <div class="contact-image ">
+      <img src="https://image.ibb.co/kUagtU/rocket_contact.png" alt="rocket_contact" class="shadow-lg"/>
+   </div>
+   <form  action="{% url 'contact' %}" method="post">
+      {% csrf_token %}
+      <h3 style="color:#df1d42;">Drop Us a Message</h3>
+      <div class="row">
+         <div class="col-md-6">
+            <div class="form-group">
+               <input type="text" class="form-control" id="name" name="name" placeholder="Name"required autofocus>
+            </div>
+            <div class="form-group">
+               <input type="text" class="form-control" id="email" name="email" placeholder="Email"required>
+            </div>
+            <div class="form-group">
+               <input type="text" id="Subject" class="form-control" name="subject" placeholder="Subject" required>
+            </div>
+            <div class="form-group">
+               <button class="btnContact" type="submit">Send Message</button>
+            </div>
+         </div>
+         <div class="col-md-6">
+            <div class="form-group">
+               <textarea class="form-control" id="message" name="message" placeholder="Please enter your message here..." rows="5" required></textarea>
+            </div>
+         </div>
+         {% if messages %}
+         {% for message in messages %}
+         <div class="alert alert-success" role="alert">
+            {{ message }}
+         </div>
+         {% endfor %}
+
+         {% endif %}
+      </div>
+   </form>
+</div>
+
+{% endblock content %}

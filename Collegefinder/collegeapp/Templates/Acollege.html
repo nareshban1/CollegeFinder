@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block content %}
+{% block javascript %}
+<script>
+   $(document).ready(function() {
+             $('.custom-select').select2();
+         });
+</script>
+{% endblock %}
+<head>
+   <title>Collegefinder| Colleges </title>
+</head>
+<div class="container-fluid filter border-top bg-dark">
+   <div class="row justify-content-center">
+      <form class="form-inline" method="GET">
+         <label class="my-1 mr-3 ml-3" for="inlineFormCustomSelectPref">Courses</label>
+         <select class="custom-select mr-sm-3" id="inlineFormCustomSelectPref" name="coursefilter" >
+            <option selected>Choose...</option>
+            {% for cors in coursesall %}
+            <option>{{ cors.shortname }}</option>
+            {% endfor %}
+         </select>
+         <label class="my-1 mr-3 ml-3" for="inlineFormCustomSelectPref">Location</label>
+         <select class="custom-select mr-sm-2 overflow-auto" id="inlineFormCustomSelect" name="locationfilter" >
+            <option selected>Choose...</option>
+            {% for locn in locall %}
+            <option>{{ locn.locationname }}</option>
+            {% endfor %}
+         </select>
+         <button type="submit" class="btn btn-primary  mr-3 ml-3">Filter</button>
+      </form>
+   </div>
+</div>
+<div class="container-fluid">
+   <div class="container-fluid text-center text-white lead">
+         <h5>{{ name }}</h5>
+   </div>
+   <div class="row justify-content-center">
+      {% for colleges in object %}
+      <div class="card c_view shadow" style="width: 18rem;">
+         <img class="card-img-top c_img border-bottom rounded-0" src="{{ MEDIA_URL }}{{ colleges.image }}" alt="Card image cap" style="width: 18rem; height: 15rem;">
+         <div class="card-body">
+            <h5 class="card-title c_name text-capitalize" style="color:#df1d42;" >{{ colleges.collegename }}</h5>
+            <p class="card-text  ">{% for cor in colleges.courses.all %}
+               <a class="card-text bg-info text-white rounded "  onclick="location.href='{% url 'course_college' cor.id %}'">{{ cor.shortname}}&emsp;</a>
+               {% endfor %}
+            </p>
+            <p class="card-text">
+               {{ colleges.location}}&emsp;
+            </p>
+            {% if request.user.is_authenticated %}
+            <a  class="btn btn-primary more" onclick="location.href='{% url 'details' colleges.id %}'" style="color:white;">More Details</a>
+            {% else %}
+            <a class="btn btn-primary more" onclick="document.getElementById('id01').style.display='block'" style="color:white;"> Log in required</a>
+            </a>
+            {% endif %}
+         </div>
+      </div>
+      {% endfor %}
+   </div>
+</div>
+<nav>
+   <ul class="pagination justify-content-center">
+      {% if object.has_previous %}
+      <li class="page-item"><a class="page-link" href="?page=1">First</a></li>
+      <li class="page-item"><a class="page-link"  href="?page={{ object.previous_page_number }}">Previous</a></li>
+      {% endif %}
+      <li class="page-item"> <a class="page-link"> Page {{ object.number }} of {{ object.paginator.num_pages }}</a> </li>
+      {% if object.has_next %}
+      <li class="page-item"><a class="page-link" href="?page={{ object.next_page_number }}">Next</a></li>
+      <li class="page-item"><a class="page-link" href="?page={{ object.paginator.num_pages }}">Last</a></li>
+      {% endif %}
+   </ul>
+</nav>
+{% endblock content %}

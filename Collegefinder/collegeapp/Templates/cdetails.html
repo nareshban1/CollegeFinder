@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% block content %}
+<head>
+   <title>Collegefinder| Details</title>
+</head>
+<!-- Page Content -->
+<div class="container-fluid bg-dark text-white " style="background:white; color:black;">
+   <div class="container-fluid col-11" >
+      <div class="row justify-content-center ">
+         <div class="col-12 p-0 border border-bottom-0 ">
+            <h2 class="my-4 px-3" style="color:#df1d42;" >{{ object.collegename }}
+               <small style="color:white;">{{ object.location }}</small>
+               <small class="float-right p-2">
+               {% if is_favourite %}
+               <a href="{% url 'favourite' id=object.id %}">
+               <i class="fas fa-heart" style="color:#fea5d1; "></i>
+               </a>
+               {% else %}
+               <a href="{% url 'favourite' id=object.id %}">
+               <i class="far fa-heart" style="color:#fea5d1; "></i>
+               </a>
+               {% endif %}
+               </small>
+            </h2>
+         </div>
+         <div class="col-12 p-0 border border-top-0 border-bottom-0 pl-3">
+            <h3 class="my-3" >
+               {% for i in rating  %}
+                  <i class="fa fa-star" style="color: #FEE12B;"></i>
+               {% endfor %}
+               {% for i in all %}
+                  <i class="far fa-star" style="color: #FEE12B;"></i>
+               {% endfor %}
+               <small class="lead" > {{ comments.count }} reviews for this college </small>
+            </h3>
+         </div>
+         <div class="row justify-content-center border  w-100">
+            <div class="col-md-7 p-0 ">
+               <img class="img-fluid rounded-0 bg-light " src="{{ MEDIA_URL }}{{ object.image }}" alt=" no image " style="height: 45vh; width:100%;" >
+            </div>
+            <div class="col-md-5 px-5 lead ">
+               <h5 class="my-3" style="color:#df1d42;" >Address:</h5>
+               {{ object.address}}
+               <h5 class="my-3" style="color:#df1d42;" >Contact info:</h5>
+               {{ object.contact_no}}
+               <h5 class="my-3" style="color:#df1d42;">Email:</h5>
+               {{ object.Email}}
+               <h5 class="my-3" style="color:#df1d42;" >Website:</h5>
+               <a href="{{ object.Website}}" >{{ object.Website}}</a>
+                <h5 class="my-3" style="color:#df1d42;" >Affiliated to:</h5>
+               {{ object.affiliation}}
+            </div>
+         </div>
+         <div class="col-12 p-0 text-white">
+            <div class="col-md-12 p-0 border" >
+               <h4 class="my-3 pl-3" style="color:#df1d42;" >College Description</h4>
+
+               <p class="lead pl-3" style="max-width:1400px; text-align:justify; ">
+                  {{ object.description }}
+               </p>
+            </div>
+            <div class="col-md-12 p-0 border text-white ">
+               <h4 class="my-3 pl-3" style="color:#df1d42;" >Course Details</h4>
+               <ol>
+                  {% for cor in object.courses.all %}
+                  <li class="lead " >({{ cor.shortname }})
+                     <br> <p class="lead" >{{ cor.coursename }}</p>
+                  </li>
+                  {% endfor %}
+               </ol>
+            </div>
+         </div>
+         <div class="col-12  border border-bottom-0 ">
+            <form method="post" style="margin-top: 1.3em;">
+               {% csrf_token %}
+               <div class="col-12 p-0">
+                  <div class="form-group ">
+                     <h4 class="" style="color:#df1d42;" >Leave a review</h4>
+                     <textarea class="form-control " id="message" name="comment" placeholder="Please enter your review here..." rows="5" required></textarea>
+                  </div>
+               </div>
+               <input type="submit" value="Submit" class="btn btn-outline-success pl-3">
+            </form>
+         </div>
+         <div class="col-12 p-0 border border-top-0">
+         <div class="row mt-5">
+            <div class="col-md-12 pl-3">
+                <div class="page-header px-3">
+                    <h4> <small class="float-right">{{ comments.count }} Comments</small> Comments </h4><br>
+                </div>
+                <div class="comments-list px-3">
+                    {% for comment in comments %}
+                    <div class="media">
+                        <div class="media-body">
+                            <h4 class="media-heading user_name">{{ comment.user.username }}<small class="float-right">{{ comment.timestamp}}</small></h4>
+                            <h5 class="lead">{{ comment.comment }}
+                               <small class="float-right" style="font-size: 16px;">
+                                   {% load mathfilters %}
+                                    {% with ''|center:comment.rating  as range %}
+                                       {% for _ in range %}
+                                           <i class="fa fa-star" style="color: #FEE12B;"></i>
+                                       {% endfor %}
+
+                                    {% endwith %}
+                                    {% with t=5|sub:comment.rating %}
+                                        {% with ''|center:t  as range %}
+                                           {% for _ in range %}
+                                               <i class="far fa-star" style="color: #FEE12B;"></i>
+                                           {% endfor %}
+                                        {% endwith %}
+                                    {% endwith %}
+                               </small></h5>
+                        </div>
+                    </div> <br>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+         </div>
+    </div>
+      </div>
+   </div>
+</div>
+{% endblock content %}

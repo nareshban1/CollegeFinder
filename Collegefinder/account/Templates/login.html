@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block content %}
+<head>
+    <title>Collegefinder| Log in </title>
+</head>
+<section class="content">
+     <div class="container">
+        <div class="row">
+          <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+            <div class="card card-signin my-5">
+              <div class="card-body">
+                <h5 class="card-title text-center">Log In</h5>
+                <form class="form-signin" action="{% url 'login' %}" method="post">
+                    {% csrf_token %}
+
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-danger" role="alert">
+                                {{ message }}
+                                </div>
+                        {% endfor %}
+
+
+                    {% endif %}
+                      <div class="form-label-group">
+
+                        <input type="text" class="form-control" id="username" name="username" placeholder="Username"required autofocus>
+
+                        <br><br>
+                      </div>
+
+                      <div class="form-label-group">
+                        <input type="password" id="inputPassword" class="form-control" name="password" placeholder="Password" required>
+                        <br><br>
+                      </div>
+                      <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Sign in</button>
+                    <div class="d-flex flex-column mt-1">
+                           <a class='m-auto' href="{% url 'password_reset' %}">Forgot password</a>
+                        </div>
+                </form>
+                  <p style="color:black; font-size:12px; text-align: center;"> Don't have an account   <a href="/register" style="color:blue;">Register</a></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+</section>
+{% endblock content %}

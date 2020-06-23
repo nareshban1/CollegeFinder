@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      {% load staticfiles %}
+      <meta charset="UTF-8">
+      <link href="{% static 'CSS/styles.css' %}" rel="stylesheet" type="text/css" />
+      <link href="https://fonts.googleapis.com/css?family=Audiowide|Exo+2|Monoton|Prosto+One|Russo+One|Titillium+Web|Lexend+Giga|Noto Sans" rel="stylesheet">
+      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+      <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+      <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+   </head>
+
+   <body class="bg-dark">
+      <!--header start-->
+      <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+         <h4><a class="text text-decoration-none logo" href="{% url 'home' %}">COLLEGE FINDER</a></h4>
+         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+         <span class="navbar-toggler-icon"></span>
+         </button>
+         <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav ml-auto">
+               <li class="nav-itemmr-sm-2" >
+                  <a class="nav-link" href="{% url 'home'  %}" >Home </a>
+               </li>
+               <li class="nav-item mr-sm-2" >
+                  <a class="nav-link" href="/colleges">All Colleges</a>
+               </li>
+               <li class="nav-item mr-sm-2">
+                  <a class="nav-link" href="/contact">Contact</a>
+               </li>
+               {% if user.is_authenticated %}
+               <li class="nav-item dropdown mr-sm-2">
+                  <a class="nav-link dropdown-toggle text-capitalize" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  {{user.username}}
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                     <a class="dropdown-item" href="/favourites">Favourites</a>
+                     <a class="dropdown-item" href="{% url 'logout' %}" id="logout"> Logout </a>
+                  </div>
+               </li>
+               {% else %}
+               <li class="nav-item mr-sm-2">
+                  <a  class="nav-link" href="/register" id="resister">Signup</a>
+               </li>
+               <li class="nav-item mr-sm-2">
+                  <a  class="nav-link" href="/login" id="log">Login</a>
+               </li>
+               {% endif %}
+            </ul>
+            <form class="form-inline my-2 my-lg-0 " method ="GET" action =" {%url 'search' %}">
+               <input class="form-control mr-sm-1" type="search" placeholder="Search college name" aria-label="Search" name="q" required>
+               <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
+            </form>
+         </div>
+      </nav>
+      <div class="container-fluid-expand-lg bg-dark">
+         {% block content %}
+         {% endblock content %}
+      </div>
+      <div id="id01" class="modal">
+         <div class="container ">
+            <div class="row animate">
+               <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+                  <div class="card card-signin my-5">
+                     <div class="card-body">
+                        <h5 class="card-title text-center">Sign In</h5>
+                        <form class="form-signin" action="{% url 'login' %}" method="post">
+                           {% csrf_token %}
+                           <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
+                           <div class="form-label-group">
+                              <input type="text" class="form-control" id="username" name="username" placeholder="Username"required autofocus>
+                              <br><br>
+                           </div>
+                           <div class="form-label-group">
+                              <input type="password" id="inputPassword" class="form-control" name="password" placeholder="Password" required>
+                              <br><br>
+
+                           </div>
+                           <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Sign in</button>
+                           <div class="d-flex flex-column mt-1">
+                                 <a class='m-auto' href="{% url 'password_reset' %}">Forgot password</a>
+                              </div>
+                        </form>
+                        <p style="color:black; font-size:12px; text-align: center;"> Don't have an account   <a href="/register" style="color:blue;">Register</a></p>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+         <a href="" id="toTopBtn" class="cd-top text-replace js-cd-top cd-top--is-visible cd-top--fade-out" data-abc="true"></a>
+
+      {% block javascript %}
+      <script>
+         // Get the modal
+         var modal = document.getElementById('id01');
+
+         // When the user clicks anywhere outside of the modal, close it
+         window.onclick = function(event) {
+         	if (event.target == modal) {
+         		modal.style.display = "none";
+         	}
+         }
+
+         $(document).ready(function() {
+            $(window).scroll(function() {
+               if ($(this).scrollTop() > 20) {
+                  $('#toTopBtn').fadeIn();
+               } else {
+                  $('#toTopBtn').fadeOut();
+            }
+         });
+
+         $('#toTopBtn').click(function() {
+            $("html, body").animate({
+               scrollTop: 0
+            }, 1000);
+            return false;
+            });
+         });
+      </script>
+      {% endblock %}
+   </body>
+   <!-- Footer -->
+   <footer class="footer font-small darken-3">
+      <!-- Footer Elements -->
+      <div class="container">
+         <!-- Grid row-->
+         <div class="row ">
+            <!-- Grid column -->
+            <div class="col-md-12 py-4  ">
+               <div class="container text-center">
+                  <!-- Facebook -->
+                  <a class="fb-ic">
+                  <i class="fab fa-facebook-f fa-lg white-text mr-md-5 mr-3 fa-2x"> </i>
+                  </a>
+                  <!-- Twitter -->
+                  <a class="tw-ic">
+                  <i class="fab fa-twitter fa-lg white-text mr-md-5 mr-3 fa-2x"> </i>
+                  </a>
+                  <!-- Google +-->
+                  <a class="gplus-ic">
+                  <i class="fab fa-google-plus-g fa-lg white-text mr-md-5 mr-3 fa-2x"> </i>
+                  </a>
+                  <!--Linkedin -->
+                  <a class="li-ic">
+                  <i class="fab fa-linkedin-in fa-lg white-text mr-md-5 mr-3 fa-2x"> </i>
+                  </a>
+                  <!--Instagram-->
+                  <a class="ins-ic">
+                  <i class="fab fa-instagram fa-lg white-text mr-md-5 mr-3 fa-2x"> </i>
+                  </a>
+                  <!--Pinterest-->
+                  <a class="pin-ic">
+                  <i class="fab fa-pinterest fa-lg white-text fa-2x"> </i>
+                  </a>
+               </div>
+            </div>
+            <!-- Grid column -->
+         </div>
+         <!-- Grid row-->
+      </div>
+      <!-- Footer Elements -->
+      <!-- Copyright -->
+      <div class="footer-copyright text-center py-2">© 2020 Copyright:
+         <a href="{% url 'home'  %}" > Collegefinder</a>
+      </div>
+      <!-- Copyright -->
+   </footer>
+   <!-- Footer -->
+</html>
